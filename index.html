@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#23262c">
+<meta name="description" content="Sistema de controle financeiro pessoal — lançamentos diários, cartões, parcelamentos, fluxo de caixa, metas e consignados.">
+<title>Controle Financeiro — Aristides</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22a%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%234ec6d6%22/%3E%3Cstop%20offset%3D%2255%25%22%20stop-color%3D%22%232b93a5%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%2314586a%22/%3E%3C/linearGradient%3E%3CclipPath%20id%3D%22c%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212.5%22/%3E%3C/clipPath%3E%3C/defs%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212.5%22%20fill%3D%22url%28%23a%29%22/%3E%3Cg%20clip-path%3D%22url%28%23c%29%22%3E%3Cpath%20d%3D%22M0%2031%20L48%208%20L48%2048%20L0%2048%20Z%22%20fill%3D%22%23000%22%20opacity%3D%22.10%22/%3E%3C/g%3E%3Crect%20x%3D%229.4%22%20y%3D%2228.8%22%20width%3D%226.8%22%20height%3D%2210.2%22%20rx%3D%223.4%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.42%22/%3E%3Crect%20x%3D%2220.6%22%20y%3D%2222.4%22%20width%3D%226.8%22%20height%3D%2216.6%22%20rx%3D%223.4%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.66%22/%3E%3Cpath%20d%3D%22M35.2%209.2%20L42.4%2020.8%20H38.6%20V36.6%20a2.4%202.4%200%200%201%20-2.4%202.4%20h-2%20a2.4%202.4%200%200%201%20-2.4%20-2.4%20V20.8%20H28%20Z%22%20fill%3D%22%23fff%22/%3E%3C/svg%3E">
+
+<!-- App instalável (PWA) -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Financeiro">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div id="app">
+  <div style="display:grid;place-items:center;height:100vh;color:#b7bcc6;font-family:system-ui">
+    <div style="text-align:center">
+      <div style="width:56px;height:56px;margin:0 auto 16px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="56" height="56"><defs><linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4ec6d6"/><stop offset="55%" stop-color="#2b93a5"/><stop offset="100%" stop-color="#14586a"/></linearGradient><clipPath id="c"><rect width="48" height="48" rx="12.5"/></clipPath></defs><rect width="48" height="48" rx="12.5" fill="url(#a)"/><g clip-path="url(#c)"><path d="M0 31 L48 8 L48 48 L0 48 Z" fill="#000" opacity=".10"/></g><rect x="9.4" y="28.8" width="6.8" height="10.2" rx="3.4" fill="#fff" fill-opacity=".42"/><rect x="20.6" y="22.4" width="6.8" height="16.6" rx="3.4" fill="#fff" fill-opacity=".66"/><path d="M35.2 9.2 L42.4 20.8 H38.6 V36.6 a2.4 2.4 0 0 1 -2.4 2.4 h-2 a2.4 2.4 0 0 1 -2.4 -2.4 V20.8 H28 Z" fill="#fff"/></svg></div>
+      Carregando o sistema…
+    </div>
+  </div>
+</div>
+<div id="toasts"></div>
+
+<script src="data/seed.enc.js"></script>
+<script src="assets/cripto.js"></script>
+<script src="assets/sync.js"></script>
+<script src="assets/store.js"></script>
+<script src="assets/engine.js"></script>
+<script src="assets/charts.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () { /* offline não é crítico */ });
+    });
+  }
+</script>
+</body>
+</html>

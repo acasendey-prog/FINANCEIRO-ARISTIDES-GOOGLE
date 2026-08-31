@@ -1,0 +1,8 @@
+{
+  "name": "Controle Financeiro",
+  "description": "Sistema de controle financeiro pessoal — lançamentos diários, cartões, parcelamentos, fluxo de caixa, metas e consignados.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
