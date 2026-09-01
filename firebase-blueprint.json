@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "users": {
+      "description": "Per-user financial root document storing real-time financial database sync.",
+      "allowRead": "auth.uid == userId",
+      "allowWrite": "auth.uid == userId",
+      "fields": {
+        "atualizadoEm": { "type": "string" },
+        "rev": { "type": "number" },
+        "dispositivo": { "type": "string" },
+        "db": { "type": "object" },
+        "userEmail": { "type": "string" }
+      }
+    }
+  }
+}

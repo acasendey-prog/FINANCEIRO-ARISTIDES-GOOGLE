@@ -70,8 +70,55 @@
       migrar5(db);
       db.versao = 5;
     }
+    if (db.versao < 6) {
+      migrar6(db);
+      db.versao = 6;
+    }
+    if (global.ProventosMG && typeof global.ProventosMG.garantirDados === 'function') {
+      global.ProventosMG.garantirDados(db);
+    }
     db.esquema = SCHEMA;
     return db;
+  }
+
+  /* --- v6: suporte expandido para múltiplos cartões, contas e dados cadastrais do servidor --- */
+  function migrar6(db) {
+    if (!Array.isArray(db.cartoes) || !db.cartoes.length) {
+      db.cartoes = [
+        { id: 'c1', nome: 'Itaú', cat: 'CC Itaú', limite: 8000, diaFechamento: 25, diaVencimento: 5, cor: '#ea580c' },
+        { id: 'c2', nome: 'Carrefour', cat: 'CC Carrefour', limite: 4500, diaFechamento: 20, diaVencimento: 1, cor: '#0284c7' }
+      ];
+    } else {
+      db.cartoes.forEach(function (c, idx) {
+        if (!c.id) c.id = 'c_' + (idx + 1) + '_' + Math.random().toString(36).slice(2, 6);
+        if (typeof c.limite !== 'number') c.limite = 5000;
+        if (!c.diaFechamento) c.diaFechamento = 25;
+        if (!c.diaVencimento) c.diaVencimento = 5;
+        if (!c.cor) c.cor = idx === 0 ? '#ea580c' : idx === 1 ? '#0284c7' : '#7c3aed';
+      });
+    }
+
+    if (!Array.isArray(db.contas) || !db.contas.length) {
+      db.contas = [
+        { id: 'ct1', nome: 'Conta Salário Itaú', banco: 'Itaú', tipo: 'salario', saldoInicial: 0, cor: '#ea580c' },
+        { id: 'ct2', nome: 'Conta Corrente Banco do Brasil', banco: 'Banco do Brasil', tipo: 'corrente', saldoInicial: 0, cor: '#f59e0b' },
+        { id: 'ct3', nome: 'Nubank / Reserva', banco: 'Nubank', tipo: 'carteira', saldoInicial: 0, cor: '#8b5cf6' },
+        { id: 'ct4', nome: 'Carteira / Dinheiro Físico', banco: 'Dinheiro', tipo: 'dinheiro', saldoInicial: 0, cor: '#10b981' }
+      ];
+    }
+
+    if (!db.servidor || typeof db.servidor !== 'object') {
+      db.servidor = {
+        nome: 'Aristides Casendey de Abreu',
+        masp: '1191021-3',
+        cpf: '041.102.096-09',
+        pisPasep: '128.4253.434-6',
+        cargo: 'Agente de Seguranca Socioeducativo (AGSE4 - A) / Dad-1 (DAD-1)',
+        situacao: 'Efetivo (apos Lei 64/2002)',
+        orgao: 'Secretaria de Justica e Seguranca Publica (SEJUSP)',
+        bancoRecebimento: 'Banco Itaú · Ag: 4980 · CC: 23287-2'
+      };
+    }
   }
 
   /* --- v4/v5: cadastro de cartões, contratos de consignado e amortizações --- */
@@ -203,12 +250,15 @@
     on: function (fn) { this.listeners.push(fn); },
     emit: function () { var d = this.db; this.listeners.forEach(function (f) { try { f(d); } catch (e) { console.error(e); } }); },
 
-    /** marca alteração: grava local (debounce), envia ao servidor e re-renderiza */
+    /** marca alteração: grava local (debounce), envia à nuvem Firestore e ao servidor, e re-renderiza */
     touch: function (descricao) {
       this.dirty = true;
       if (this.db && this.db.meta) this.db.meta.modificadoEm = new Date().toISOString();
       if (descricao) this.log(descricao);
       this.persist(false);
+      if (global.FirebaseCloud && typeof global.FirebaseCloud.agendarSalvar === 'function') {
+        global.FirebaseCloud.agendarSalvar(this.db);
+      }
       if (global.Sync) Sync.agendar(this.db);
       this.emit();
     },

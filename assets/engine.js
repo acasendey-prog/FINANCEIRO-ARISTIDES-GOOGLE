@@ -149,17 +149,20 @@
     return r2(E.parcelasDoMes(db, m, cartao).reduce(function (a, b) { return a + b.valor; }, 0));
   };
   /* -------------------------------------------------------------- cartões */
-  /** cadastro de cartões: [{nome, cat}] — a categoria é onde entra o pagamento da fatura */
+  /** cadastro de cartões: [{id, nome, cat, limite, diaFechamento, diaVencimento, cor}] */
   E.cadastroCartoes = function (db) {
     if (db.cartoes && db.cartoes.length) return db.cartoes;
-    return [{ nome: 'Itaú', cat: 'Cartão' }];
+    return [{ id: 'c1', nome: 'Itaú', cat: 'CC Itaú', limite: 8000, diaFechamento: 25, diaVencimento: 5, cor: '#ea580c' }];
   };
   E.cartoes = function (db) {
     return E.cadastroCartoes(db).map(function (c) { return c.nome; });
   };
+  E.cartaoPorNome = function (db, cartao) {
+    return E.cadastroCartoes(db).filter(function (c) { return c.nome === cartao; })[0] || null;
+  };
   E.catDoCartao = function (db, cartao) {
-    var r = E.cadastroCartoes(db).filter(function (c) { return c.nome === cartao; })[0];
-    return r ? r.cat : 'Cartão';
+    var r = E.cartaoPorNome(db, cartao);
+    return r ? r.cat : (cartao ? 'CC ' + cartao : 'Cartão');
   };
   /** fatura efetivamente paga = lançamentos na categoria do cartão */
   E.faturaPaga = function (db, m, cartao) {
@@ -183,6 +186,15 @@
       pago: r2(pagas * p.valor), falta: r2((p.n - pagas) * p.valor),
       status: pagas >= p.n ? 'quitado' : (pagas <= 0 ? 'a-iniciar' : 'andamento')
     };
+  };
+
+  /* -------------------------------------------------------------- contas */
+  E.cadastroContas = function (db) {
+    if (db.contas && db.contas.length) return db.contas;
+    return [{ id: 'ct1', nome: 'Conta Salário Itaú', banco: 'Itaú', tipo: 'salario', cor: '#ea580c' }];
+  };
+  E.contas = function (db) {
+    return E.cadastroContas(db).map(function (c) { return c.nome; });
   };
 
   /* ----------------------------------------------------------- empréstimos */

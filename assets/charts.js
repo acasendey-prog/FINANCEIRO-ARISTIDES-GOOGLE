@@ -77,7 +77,7 @@
         var tx = el('text', { class: 'ax', x: pad.l - 8, y: Y(g) + 3.5, 'text-anchor': 'end' });
         tx.textContent = curto(g); svg.appendChild(tx);
       }
-      if (sc.lo < 0) svg.appendChild(el('line', { x1: pad.l, x2: w - pad.r, y1: Y(0), y2: Y(0), stroke: 'rgba(255,255,255,.28)', 'stroke-width': 1 }));
+      if (sc.lo < 0) svg.appendChild(el('line', { x1: pad.l, x2: w - pad.r, y1: Y(0), y2: Y(0), stroke: 'rgba(15,23,42,.25)', 'stroke-width': 1 }));
 
       var passo = Math.max(1, Math.ceil(o.labels.length / Math.floor(iw / 52)));
       var ult = o.labels.length - 1;
@@ -158,10 +158,10 @@
       }
 
       /* camada de hover: faixa por ponto + crosshair */
-      var cross = el('line', { y1: pad.t, y2: pad.t + ih, stroke: 'rgba(255,255,255,.26)', 'stroke-width': 1, opacity: 0 });
+      var cross = el('line', { y1: pad.t, y2: pad.t + ih, stroke: 'var(--chart-zero)', 'stroke-width': 1, opacity: 0 });
       svg.appendChild(cross);
       var marks = o.series.map(function (s) {
-        var c = el('circle', { r: 4.5, fill: s.cor, stroke: 'var(--bg-base)', 'stroke-width': 2, opacity: 0 });
+        var c = el('circle', { r: 4.5, fill: s.cor, stroke: 'var(--halo-color)', 'stroke-width': 2, opacity: 0 });
         svg.appendChild(c); return c;
       });
       o.labels.forEach(function (lb, i) {
@@ -234,7 +234,7 @@
           svg.appendChild(r);
         });
       });
-      svg.appendChild(el('line', { x1: pad.l, x2: w - pad.r, y1: Y(0), y2: Y(0), stroke: 'rgba(255,255,255,.28)', 'stroke-width': 1 }));
+      svg.appendChild(el('line', { x1: pad.l, x2: w - pad.r, y1: Y(0), y2: Y(0), stroke: 'var(--chart-zero)', 'stroke-width': 1 }));
     });
   };
 
@@ -253,7 +253,7 @@
         var t = el('text', { class: 'ax', x: labW - 10, y: y + 13, 'text-anchor': 'end', fill: 'var(--ink-2)' });
         t.textContent = it.cat.length > 24 ? it.cat.slice(0, 23) + '…' : it.cat;
         svg.appendChild(t);
-        svg.appendChild(el('rect', { x: labW, y: y + 4, width: bw, height: 13, rx: 4, fill: 'rgba(255,255,255,.05)' }));
+        svg.appendChild(el('rect', { x: labW, y: y + 4, width: bw, height: 13, rx: 4, fill: 'var(--chart-grid)' }));
         var lw = Math.max(3, it.valor / max * bw);
         var r = el('rect', { x: labW, y: y + 4, width: lw, height: 13, rx: 4, fill: o.cor || 'var(--s1)', opacity: .9 });
         r.style.cursor = 'pointer';
